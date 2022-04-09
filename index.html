@@ -8,22 +8,42 @@
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
 </head>
-<body onload='onPageLoad()'>
-    <h1>Hello world</h1>
+<body onload="onPageLoad()">
+    
 
-    <div class='form-container'>
-        <div class="column">
-            <div class="client-id">
-                <label for="clientId" class='form-label'>Client ID: </label>
-                <input type="text" class='form-input' id='clientId'>
-            </div>
-            <div class='client-secret'>
-                <label for="clientSecret" class='form-label'>Client Secret: </label>
-                <input type="text" class='form-input' id='clientSecret'>
-            </div>
-            <input type="button" class='btn' id='request-auth' value='Request Authorization'>
-        </div>
-        <input type="button" id='apiCall'>
+    <div class='slider'>
+        <div class='spinner' id='topArtistList'></div>
+            <!-- <div>
+                <img src="" alt="">
+                <h2>Placeholder</h2>
+            </div> -->
     </div>
+
+    <span class='scrollBtn left' onclick="gallerySpin('-')">&lt;</span>
+    <span class='scrollBtn right' onclick="gallerySpin('')">&gt;</span>
+
+    <div id="albumDisplay">
+        <div class='albumContainer' id='albumContainer1'>
+            <div id='imageContainer1' class='imageContainer'>
+                <img src="" id='coverArt1' class='coverArt' alt="Album Cover Art">
+            </div>
+            <h2 id='albumTitle1' class='albumTitle'></h2>
+        </div>
+    
+        <div class='albumContainer' id='albumContainer2'>
+            <div id='imageContainer2' class='imageContainer'>
+                <img src="" id='coverArt2' class='coverArt' alt="Album Cover Art">
+            </div>
+            <h2 id='albumTitle2' class='albumTitle'></h2>
+        </div>
+    </div>
+
+    <span class='score'>Score: 
+        <span id='scoreNumber'></span>
+    </span>
+
+
+    <input type="button" class='btn' id='request-auth' value='Request Authorization'>
+    <input type="button" id='apiCall'>
 </body>
 </html>

@@ -1,0 +1,100 @@
+#artistName {
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+}
+
+#albumDisplay {
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    justify-content: space-around;
+}
+
+.albumContainer {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.imageContainer {
+    width: 60%;
+}
+
+.coverArt {
+    width: 100%;
+    height: 100%;
+}
+
+.albumTitle {
+    text-align: center;
+}
+
+.score {
+    display: block;
+    text-align: center;
+}
+
+/* Image Carousel */
+
+.slider {
+    perspective: 1200px;
+}
+
+.spinner {
+    transform-style: preserve-3d;
+    height: 300px;
+    transform-origin: 50% 50% -500px;
+    transition: 1s;
+}
+
+/* Artist Div */
+.artist {
+    height: 400px;
+    width: 400px;
+    position: absolute;
+    left: 30%;
+    transform-origin: 50% 50% -500px;
+    outline: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid black; */
+    /* background-color: rgba(0, 0, 0, 100%); */
+}
+
+.artist img {
+    width: 50%;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.spinner div:nth-child(1) {transform: rotateY(0deg)}
+.spinner div:nth-child(2) {transform: rotateY(-45deg)}
+.spinner div:nth-child(3) {transform: rotateY(-90deg)}
+.spinner div:nth-child(4) {transform: rotateY(-135deg)}
+.spinner div:nth-child(5) {transform: rotateY(-180deg)}
+.spinner div:nth-child(6) {transform: rotateY(-225deg)}
+.spinner div:nth-child(7) {transform: rotateY(-270deg)}
+.spinner div:nth-child(8) {transform: rotateY(-315deg)}
+
+.scrollBtn {
+    font-size: 2rem;
+}
+
+.scrollBtn.right {
+    float: right;
+}
+
+.scrollBtn.left {
+    float: left;
+}
+
+.scrollBtn:hover {
+    cursor: pointer;
+}
