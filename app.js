@@ -37,6 +37,8 @@ function onPageLoad() {
     // client_id = localStorage.getItem('client_id', client_id);
     // client_secret = localStorage.getItem('client_secret', client_secret);
 
+    getUserTopArtists();
+
     // If the URL contains query params
     if (window.location.search.length > 0) {
         handleRedirect();
@@ -128,6 +130,11 @@ function requestAuthorization() {
     window.location.href = url; //show Spotify authorization screen
 }
 
+let score = 0;
+let count = 0;
+
+let eventListenerPlaced = false;
+
 // 1 aka callback
 async function handleArtistAlbum() {
     
@@ -138,17 +145,80 @@ async function handleArtistAlbum() {
         let albumCoversandTitles = await getAlbumCoversandTitles(result)
         let filteredAlbums = filterAlbumDuplicates(albumCoversandTitles);
         let randomAlbums = pickRandomAlbums(filteredAlbums)
-        let albumPopularityScores = await getAlbumPopularity(result) // returns array of album id's
+        displayAlbumInfo(randomAlbums);
+        // let albumPopularityScores = await getAlbumPopularity(result) // returns array of album id's
         // Here we can get album art, including album title
 
-        console.log(randomAlbums)
-        displayAlbumInfo(randomAlbums)
-        console.log(albumCoversandTitles)
-        console.log(filterPopularityScores(albumPopularityScores))
 
-        // Now that we have albums: iterate through albums, getting their
-        // tracks and the individual popularity of each track. Then, reduce
-        // that data and finally sort albums by total streams. 
+        // NOT OPTIMAL: FIX THIS
+        function displayAlbumInfo(albumInfo) {
+
+            console.log('porky')
+            
+            let albumOne = albumInfo[0];
+            let albumTwo = albumInfo[1];
+        
+            // Album One
+            albumCoverImg1.src = albumOne.cover;
+            albumTitle1.innerText = albumOne.name;
+            let pop1 = albumOne.popularity;
+
+            // Album Two
+            albumCoverImg2.src = albumTwo.cover;
+            albumTitle2.innerText = albumTwo.name;
+            let pop2 = albumTwo.popularity;
+
+            if (!eventListenerPlaced) {
+                albumContainer1.addEventListener('click', playGameOne);
+                albumContainer2.addEventListener('click', playGameTwo);
+                eventListenerPlaced = true;
+            }
+
+            function playGameOne() {
+                console.log(pop1, pop2)
+                if (count < 10) {
+                    if (pop1 > pop2) {
+                        console.log('You Win!');
+                        count += 1;
+                        score += 1;
+                        displayScore.innerText = `${score} / ${count}`;
+                    } else {
+                        count += 1;
+                        displayScore.innerText = `${score} / ${count}`;
+                        console.log('You Lose')
+                    }
+
+                    let res = pickRandomAlbums(filteredAlbums);
+                    displayAlbumInfo(res);
+                } else {
+                    console.log('game over')
+                    return;
+                }
+            };
+                
+            function playGameTwo() {
+                console.log(pop1, pop2)
+                if (count < 10) {
+                    if (pop1 < pop2) {
+                        console.log('You Win!');
+                        count += 1;
+                        score += 1;
+                        displayScore.innerText = `${score} / ${count}`;
+                    } else {
+                        count += 1;
+                        displayScore.innerText = `${score} / ${count}`;
+                        console.log('You Lose')
+                    }
+        
+                    let res = pickRandomAlbums(filteredAlbums);
+                    displayAlbumInfo(res);
+                } else {
+                    console.log('game over')
+                    return;
+                }
+            };
+        }
+        
     } else if (this.status == 401) {
         refreshAccessToken();
     } else {
@@ -172,46 +242,17 @@ const imageContainerDiv2 = document.getElementById('imageContainer2');
 let albumCoverImg2 = document.getElementById('coverArt2');
 let albumTitle2 = document.getElementById('albumTitle2');
 
-const score = document.getElementById('scoreNumber');
-let count = 0;
+const displayScore = document.getElementById('scoreNumber');
 
-function displayAlbumInfo(albumInfo) {
-    
-    let albumOne = albumInfo[0];
-    let albumTwo = albumInfo[1];
 
-    // Album One
-    albumCoverImg1.src = albumOne.cover;
-    albumTitle1.innerText = albumOne.name;
-    albumContainer1.addEventListener('click', () => {
-        console.log(albumOne.popularity, albumTwo.popularity)
-        if (albumOne.popularity > albumTwo.popularity) {
-            console.log('You Win!');
-            count += 1;
-            score.innerText = count;
-        } else {
-            console.log('You Lose')
-        }
-    });
 
-    // Album Two
-    albumCoverImg2.src = albumTwo.cover;
-    albumTitle2.innerText = albumTwo.name;
-    albumContainer2.addEventListener('click', () => {
-        console.log(albumOne.popularity, albumTwo.popularity)
-        if (albumTwo.popularity > albumOne.popularity) {
-            console.log('You Win!')
-            count += 1;
-            score.innerText = count;
-        } else {
-            console.log('You Lose')
-        }
-    });
-}
+
 
 // Picks two random albums from array of album objects
 // Places random albums in an array
 function pickRandomAlbums(albumList) {
+
+    console.log(albumList)
 
     // Return random index from 0 until length of album list
     const randomNum1 = Math.floor(Math.random() * albumList.length);
@@ -219,24 +260,20 @@ function pickRandomAlbums(albumList) {
     // Selects first album before it is deleted
     const firstAlbum = albumList[randomNum1];
 
-    console.log(firstAlbum)
-
-    // Removes first number so that second num can't be a duplicate
-    albumList.splice(randomNum1, 1);
-
     // Select second number 
-    const randomNum2 = Math.floor(Math.random() * albumList.length);
+    let randomNum2 = Math.floor(Math.random() * albumList.length);
+
+    // Makes sure numbers aren't the same
+    while (randomNum1 === randomNum2) {
+        randomNum2 = Math.floor(Math.random() * albumList.length);
+    }
 
     // Selects second album
     const secondAlbum = albumList[randomNum2];
 
-    // Deletes second album
-    albumList.splice(randomNum2, 1);
-
-    console.log(albumList);
 
     // Return array of two randomly chosen albums
-    return [firstAlbum, secondAlbum]
+    return [firstAlbum, secondAlbum];
 }
 
 function getPopularityScore() {
@@ -250,87 +287,6 @@ function filterPopularityScores(popularityScores) {
     // Gets top 10 albums by popularity score
     const topTenScores = sortedScores.slice(0, 10)
     return topTenScores
-}
-
-// Large function that get's album popularity scores
-async function getAlbumPopularity(albumIds) {
-    let access_token1 = localStorage.getItem('access_token')
-    // Gets array of album tracks for each album
-    const getAlbumTracks = await Promise.all(albumIds.map(async albumId => {
-            let albumTracks = await fetch(`https://api.spotify.com/v1/albums/${albumId}/tracks`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type' : 'application/json',
-                    'Authorization' : 'Bearer ' + access_token1,
-                }
-                })
-            return albumTracks;
-        }))
-            .then(results => Promise.all(results.map(r => r.json()))) // Returns array of objects with track data
-            .then(data => data.map(r => r.items)); // Returns actual items(tracks) from data
- 
-    // Does multiple things: not good: gives final popularity score
-    const processData = async () => {
-        const albumTracks = getAlbumTracks; // Array of arrays with track info for each track ((20) [Array(20), Array(20), Array(11)]...)
-        for (album of albumTracks) {
-            for (let i = 0; i < album.length; i++) {
-                album[i] = album[i].id // returns tracks as track id's
-                let track = album[i];
-                let res = await getTrackData(track);
-                res = res.popularity;
-                album[i] = res;
-                // album[i] is giving undefined: need to find a way to assign
-                // it to a variable
-                // testing
-            }
-        }
-
-        return albumTracks
-    }
-
-    // Returns object data for each individual track
-    const getTrackData = async (track) => {
-        let access_token1 = localStorage.getItem('access_token')
-        let trackData = await fetch(`https://api.spotify.com/v1/tracks/${track}`, {
-                    method: 'GET', 
-                    headers: {
-                        'Authorization' : 'Bearer ' + access_token1,
-                        'Content-Type' : 'application/json',
-                    }
-            })
-            .then(res => res.json());
-        
-        return trackData // returns object of each track
-    }
-
-    // Gets average popularity for each album
-    const getAveragePopularity = async () => {
-        const albumPopularityList = await processData();
-
-        // Averages track popularity (rename function)
-        for (let i = 0; i < albumPopularityList.length; i++) {
-            let length = albumPopularityList[i].length
-            albumPopularityList[i] = albumPopularityList[i].reduce((acc, c) => acc += c, 0) // totals popularity scores for each album
-            albumPopularityList[i] = albumPopularityList[i] / length  // averages popularity score
-        }
-
-        return albumPopularityList; // returns a single array of values: the popularity of each album!
-    }
-
-
-    // NEXT STEPS!
-    // Worry about cleaning up code later? or maybe now
-    // Get album art/title/artist etc to display on DOM
-    // Turn array of numbers into array of objects? with album name as key, and 
-    // popularity as value
-    // Maybe make function to construct an object for each album, with
-    // popularity, title, artist etc. and THEN append to dom
-
-
-
-    // console.log(await getAveragePopularity())
-    return await getAveragePopularity()
-
 }
 
 // Calls API to obtain all of selected artist's albums
@@ -416,10 +372,6 @@ function doThis() {
     callArtistAlbumApi(res);
 }
 
-// function changePage() {
-//     window.location.href = 'APIgame.html'
-// }
-
 // Takes an array of album ID's and returns their cover art and titles
 async function getAlbumCoversandTitles(albumIds) {
     let access_token1 = localStorage.getItem('access_token')
@@ -441,17 +393,15 @@ async function getAlbumCoversandTitles(albumIds) {
                 cover: r.images[0].url,
             }
         }))
-                // return {
-                //     name: data.name,
-                //     popularity: data.popularity,
-                //     cover: data.images[0]
-                // }
-            // })
+                
     return res1;
 }
 
 // Filters duplicates of album titles from array of objects.
 function filterAlbumDuplicates(albumInfo) {
+
+    // Sort by popularity so most popular form of album gets returned
+    albumInfo = albumInfo.sort((a, b) => b.popularity - a.popularity);
     
     let uniqueNames = [];
 
@@ -467,31 +417,12 @@ function filterAlbumDuplicates(albumInfo) {
         
         return false;
     })
-    console.log(unique)
+    
+    // Returns filtered list 'unique', not uniqueNames
     return unique;
     
-    // let albumTitles = albumInfo.map(album => album.name);
-    // return [...new Set(albumTitles)];
 }
 
-
-// const getAlbumTracks = await Promise.all(albumIds.map(async albumId => {
-//     let albumTracks = await fetch(`https://api.spotify.com/v1/albums/${albumId}/tracks`, {
-//         method: 'GET',
-//         headers: {
-//             'Content-Type' : 'application/json',
-//             'Authorization' : 'Bearer ' + access_token,
-//         }
-//         })
-//     return albumTracks;
-// }))
-//     .then(results => Promise.all(results.map(r => r.json()))) // Returns array of objects with track data
-//     .then(data => data.map(r => r.items)); // Returns actual items(tracks) from data
-
-
-if (makeApiCallBtn) {
-    makeApiCallBtn.addEventListener('click', getUserTopArtists) // change back to getUserTopAlbums when done testing
-}
 
 if (requestAuthBtn) {
     requestAuthBtn.addEventListener('click', requestAuthorization);

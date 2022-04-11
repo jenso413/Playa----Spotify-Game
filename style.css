@@ -1,41 +1,12 @@
+h1, h2 {
+    text-align: center;
+}
+
 #artistName {
     text-align: center;
 }
 
 .subtitle {
-    text-align: center;
-}
-
-#albumDisplay {
-    display: flex;
-    width: 80%;
-    margin: 0 auto;
-    justify-content: space-around;
-}
-
-.albumContainer {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.imageContainer {
-    width: 60%;
-}
-
-.coverArt {
-    width: 100%;
-    height: 100%;
-}
-
-.albumTitle {
-    text-align: center;
-}
-
-.score {
-    display: block;
     text-align: center;
 }
 
