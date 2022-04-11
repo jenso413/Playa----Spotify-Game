@@ -464,6 +464,12 @@ function filterAlbumDuplicates(albumInfo) {
 //     .then(data => data.map(r => r.items)); // Returns actual items(tracks) from data
 
 
-makeApiCallBtn.addEventListener('click', getUserTopArtists) // change back to getUserTopAlbums when done testing
-requestAuthBtn.addEventListener('click', requestAuthorization);
+if (makeApiCallBtn) {
+    makeApiCallBtn.addEventListener('click', getUserTopArtists) // change back to getUserTopAlbums when done testing
+}
+
+if (requestAuthBtn) {
+    requestAuthBtn.addEventListener('click', requestAuthorization);
+}
+
 
