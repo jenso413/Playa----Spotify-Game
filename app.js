@@ -28,6 +28,10 @@ function gallerySpin(sign) {
     spinner.setAttribute('style', `transform: rotateY(${angle}deg);`);
 }
 
+function addSmurfsOnLoad() {
+    console.log('hello');
+}
+
 function onPageLoad() {
     // Persist to local storage so we can read them again after page load
     // client_id = localStorage.getItem('client_id', client_id);
@@ -250,14 +254,14 @@ function filterPopularityScores(popularityScores) {
 
 // Large function that get's album popularity scores
 async function getAlbumPopularity(albumIds) {
-
+    let access_token1 = localStorage.getItem('access_token')
     // Gets array of album tracks for each album
     const getAlbumTracks = await Promise.all(albumIds.map(async albumId => {
             let albumTracks = await fetch(`https://api.spotify.com/v1/albums/${albumId}/tracks`, {
                 method: 'GET',
                 headers: {
                     'Content-Type' : 'application/json',
-                    'Authorization' : 'Bearer ' + access_token,
+                    'Authorization' : 'Bearer ' + access_token1,
                 }
                 })
             return albumTracks;
@@ -286,10 +290,11 @@ async function getAlbumPopularity(albumIds) {
 
     // Returns object data for each individual track
     const getTrackData = async (track) => {
+        let access_token1 = localStorage.getItem('access_token')
         let trackData = await fetch(`https://api.spotify.com/v1/tracks/${track}`, {
                     method: 'GET', 
                     headers: {
-                        'Authorization' : 'Bearer ' + access_token,
+                        'Authorization' : 'Bearer ' + access_token1,
                         'Content-Type' : 'application/json',
                     }
             })
@@ -330,11 +335,13 @@ async function getAlbumPopularity(albumIds) {
 
 // Calls API to obtain all of selected artist's albums
 async function callArtistAlbumApi(artist) {
+    console.log('michael')
+    let access_token1 = localStorage.getItem('access_token')
     let url = `https://api.spotify.com/v1/artists/${artist.id}/albums?include_groups=album&limit=50`;
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token1);
     xhr.send();
     xhr.onload = handleArtistAlbum;
 }
@@ -391,19 +398,37 @@ function displayTopArtists(artistList) {
         artistDiv.appendChild(artistName);
 
         topArtistList.appendChild(artistDiv)
-        artistDiv.addEventListener('click', callArtistAlbumApi.bind(null, artist))
+        // artistDiv.addEventListener('click', callArtistAlbumApi.bind(null, artist))
+        artistDiv.addEventListener('click', () => {
+            localStorage.setItem('artist', JSON.stringify(artist));
+            window.location.href = 'APIgame.html';
+            doThis();
+        })
         // artistDiv.addEventListener('click', displayArtistName.bind(null, artist.name))
     })
 }
 
+function doThis() {
+    let res = localStorage.getItem('artist');
+    res = JSON.parse(res);
+    console.log('lasagna');
+    console.log(res)
+    callArtistAlbumApi(res);
+}
+
+// function changePage() {
+//     window.location.href = 'APIgame.html'
+// }
+
 // Takes an array of album ID's and returns their cover art and titles
 async function getAlbumCoversandTitles(albumIds) {
+    let access_token1 = localStorage.getItem('access_token')
     const res1 = await Promise.all(albumIds.map(async albumId => {
         let answer = await fetch(`https://api.spotify.com/v1/albums/${albumId}`, {
             method: 'GET', 
             headers: {
                 'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer ' + access_token,
+                'Authorization' : 'Bearer ' + access_token1,
             }
         })
         return answer;
