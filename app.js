@@ -1,7 +1,7 @@
 // Display 'your top artists' and allow to pick from them to select their top
 // 10 albums.
 
-let redirect_uri = "http://127.0.0.1:5500/index.html";
+let redirect_uri = "http://127.0.0.1:5500/Spotify-API-Game/index.html";
 
 let client_id = '707ddb1c1701414db37c26ccdd399cd0';
 let client_secret = 'fa89a50fa328403e8aaace62f84760ac';
@@ -14,10 +14,6 @@ const TOP_USER_ARTISTS = "https://api.spotify.com/v1/me/top/artists?limit=8" // 
 const requestAuthBtn = document.getElementById('request-auth');
 const makeApiCallBtn = document.getElementById('apiCall');
 const topArtistList = document.getElementById('topArtistList');
-
-const hello = document.getElementById('hello')
-hello.addEventListener('click', () => {
-    console.log('hello')})
 
 let angle = 0;
 
@@ -353,9 +349,9 @@ function refreshAccessToken() {
 
 const artistNameHeader = document.getElementById('artistName');
 
-function displayArtistName(artistName) {
-    artistNameHeader.innerText = artistName;
-}
+// function displayArtistName(artistName) {
+//     artistNameHeader.innerText = artistName;
+// }
 
 // Gets top 10 user artists as objects
 async function getUserTopArtists() {
@@ -396,7 +392,7 @@ function displayTopArtists(artistList) {
 
         topArtistList.appendChild(artistDiv)
         artistDiv.addEventListener('click', callArtistAlbumApi.bind(null, artist))
-        artistDiv.addEventListener('click', displayArtistName.bind(null, artist.name))
+        // artistDiv.addEventListener('click', displayArtistName.bind(null, artist.name))
     })
 }
 
@@ -471,7 +467,3 @@ function filterAlbumDuplicates(albumInfo) {
 makeApiCallBtn.addEventListener('click', getUserTopArtists) // change back to getUserTopAlbums when done testing
 requestAuthBtn.addEventListener('click', requestAuthorization);
 
-
-fetch(dogurl)
-    .then(res => res.json)
-    .then(data => console.log(data))
