@@ -11,7 +11,7 @@
 <body onload="doThis()">
 
     <h1>Game Name</h1>
-    <h2>How well do you know (artist name)?</h2>
+    <h2>How well do you know <span class="artist-name"></span>?</h2>
 
     <div id="albumDisplay">
         <div class='albumContainer' id='albumContainer1'>
@@ -32,5 +32,13 @@
     <span class='score'>Score: 
         <span id='scoreNumber'></span>
     </span>
+
+    <div class="modal-bg hide-modal">
+        <div class="modal">
+            <h3>You got 6/10 questions right</h3>
+            <p>You're a big fan of <span class="artist-name"></span>!</p>
+            <button>Play Again</button>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,13 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400&family=Roboto:wght@300;400;500;600;800&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    background: rgb(18,18,18);
+    background-image: url("https://www-growth.scdn.co/static/home/bursts-tablet.svg");
+    background-size: cover;
+    background-position: bottom 70% left;
+    color: white;
+}
+
 h1 {
     text-align: center;
+    margin-bottom: 20rem;
+    font-size: 4rem;
+    font-weight: 500;
 }
 
 .btn {
     border-radius: 10px;
-    padding: 10px;
-    background-color: lightgreen;
+    padding: 25px 60px;
+    background-color: rgb(30,215,96);
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    font-weight: 600;
+    font-size: 1.5rem;
     display: block;
-    margin: 0 auto;
     border-style: none;
     cursor: pointer;
 }

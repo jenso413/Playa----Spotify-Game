@@ -132,6 +132,7 @@ function requestAuthorization() {
 
 let score = 0;
 let count = 0;
+const modal = document.querySelector('.modal-bg');
 
 let eventListenerPlaced = false;
 
@@ -191,7 +192,8 @@ async function handleArtistAlbum() {
                     let res = pickRandomAlbums(filteredAlbums);
                     displayAlbumInfo(res);
                 } else {
-                    console.log('game over')
+                    console.log('game over');
+                    modal.classList.toggle('hide-modal')
                     return;
                 }
             };
@@ -213,7 +215,8 @@ async function handleArtistAlbum() {
                     let res = pickRandomAlbums(filteredAlbums);
                     displayAlbumInfo(res);
                 } else {
-                    console.log('game over')
+                    console.log('game over');
+                    modal.classList.toggle('hide-modal');
                     return;
                 }
             };
@@ -312,10 +315,6 @@ function refreshAccessToken() {
 
 const artistNameHeader = document.getElementById('artistName');
 
-// function displayArtistName(artistName) {
-//     artistNameHeader.innerText = artistName;
-// }
-
 // Gets top 10 user artists as objects
 async function getUserTopArtists() {
     const userTopArtists = await fetch(TOP_USER_ARTISTS, {
@@ -355,7 +354,9 @@ function displayTopArtists(artistList) {
 
         topArtistList.appendChild(artistDiv)
         // artistDiv.addEventListener('click', callArtistAlbumApi.bind(null, artist))
+
         artistDiv.addEventListener('click', () => {
+            // Allows us to access clicked on artist name on next page
             localStorage.setItem('artist', JSON.stringify(artist));
             window.location.href = 'APIgame.html';
             doThis();
@@ -364,12 +365,21 @@ function displayTopArtists(artistList) {
     })
 }
 
+// Pull clicked on artist name
 function doThis() {
     let res = localStorage.getItem('artist');
     res = JSON.parse(res);
-    console.log('lasagna');
     console.log(res)
     callArtistAlbumApi(res);
+    displayArtistName(res)
+}
+
+// Displays artist name to the DOM
+function displayArtistName(artist) {
+    const emptySpansForName = document.querySelectorAll('.artist-name');
+    emptySpansForName.forEach(span => {
+        span.innerText = artist.name;
+    })
 }
 
 // Takes an array of album ID's and returns their cover art and titles
