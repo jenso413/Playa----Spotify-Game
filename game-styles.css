@@ -14,14 +14,20 @@ body {
 
 h1 {
     text-align: center;
-    font-weight: 500;
+    font-size: 4rem;
+    font-weight: 300;
     margin: 3rem 0;
 }
 
 h2 {
     text-align: center;
     font-weight: 400;
+    font-size: 1.3rem;
     margin-bottom: 6rem;
+}
+
+.rules {
+    color:#c1c3c6;
 }
 
 #albumDisplay {
@@ -69,18 +75,23 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.hide-modal {
     visibility: hidden;
     opacity: 0;
+    transition: visibility 2s;
+    transition: opacity 1s;
+    transition-delay: 0.5s;
+}
+
+.bg-active {
+    visibility: visible;
+    opacity: 1;
 }
 
 .modal {
     background-color: rgb(18,18,18);
     color: white;
-    padding: 20px;
-    width: 28%;
+    padding: 30px 40px;
+    width: fit-content;
     height: 21%;
     border-radius: 20px;
     display: flex;
@@ -110,4 +121,8 @@ h2 {
 
 .modal p {
     color: #c1c3c6;
+}
+
+.hide {
+    display: none;
 }

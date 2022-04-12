@@ -10,8 +10,8 @@
 </head>
 <body onload="doThis()">
 
-    <h1>Game Name</h1>
-    <h2>How well do you know <span class="artist-name"></span>?</h2>
+    <h1>Album Knowledge Test</h1>
+    <h2 class="rules">Select the album you think is most popular. How well do you know <span class="artist-name"></span>?</h2>
 
     <div id="albumDisplay">
         <div class='albumContainer' id='albumContainer1'>
@@ -33,11 +33,14 @@
         <span id='scoreNumber'></span>
     </span>
 
-    <div class="modal-bg hide-modal">
+    <div class="modal-bg">
         <div class="modal">
-            <h3>You got 6/10 questions right</h3>
-            <p>You're a big fan of <span class="artist-name"></span>!</p>
-            <button>Play Again</button>
+            <h3>You got <span id="final-score"></span> questions right</h3>
+            <p class="text1 hide">You're a <span class="artist-name"></span> super fan!</p>
+            <p class="text2 hide">You're a big fan of <span class="artist-name"></span>!</p>
+            <p class="text3 hide">You listen to <span class="artist-name"></span> every now and then..</p>
+            <p class="text4 hide"><span class="artist-name"></span> who?</p>
+            <button id="play-again">Play Again</button>
         </div>
     </div>
 </body>

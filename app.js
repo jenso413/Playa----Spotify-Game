@@ -28,10 +28,6 @@ function gallerySpin(sign) {
     spinner.setAttribute('style', `transform: rotateY(${angle}deg);`);
 }
 
-function addSmurfsOnLoad() {
-    console.log('hello');
-}
-
 function onPageLoad() {
     // Persist to local storage so we can read them again after page load
     // client_id = localStorage.getItem('client_id', client_id);
@@ -133,8 +129,23 @@ function requestAuthorization() {
 let score = 0;
 let count = 0;
 const modal = document.querySelector('.modal-bg');
+const finalScore = document.getElementById('final-score');
+const text1 = document.querySelector('.text1')
+const text2 = document.querySelector('.text2')
+const text3 = document.querySelector('.text3')
+const text4 = document.querySelector('.text4')
 
 let eventListenerPlaced = false;
+
+const playAgainBtn = document.getElementById('play-again');
+
+// Redirects to artist selection again. Need to find a way to save and get access token from local storage
+if (playAgainBtn) {
+    playAgainBtn.addEventListener('click', () => {
+        window.location.href = 'index.html'
+        doThis();
+    })    
+}
 
 // 1 aka callback
 async function handleArtistAlbum() {
@@ -169,15 +180,15 @@ async function handleArtistAlbum() {
             albumTitle2.innerText = albumTwo.name;
             let pop2 = albumTwo.popularity;
 
-            if (!eventListenerPlaced) {
-                albumContainer1.addEventListener('click', playGameOne);
-                albumContainer2.addEventListener('click', playGameTwo);
-                eventListenerPlaced = true;
-            }
+            albumContainer1.addEventListener('click', playGameOne);
+            albumContainer2.addEventListener('click', playGameTwo);
 
             function playGameOne() {
+                // Removes event listeners after click to allow access to new data
+                albumContainer1.removeEventListener('click', playGameOne);
+                albumContainer2.removeEventListener('click', playGameTwo);
                 console.log(pop1, pop2)
-                if (count < 10) {
+                if (count < 9) {
                     if (pop1 > pop2) {
                         console.log('You Win!');
                         count += 1;
@@ -191,16 +202,37 @@ async function handleArtistAlbum() {
 
                     let res = pickRandomAlbums(filteredAlbums);
                     displayAlbumInfo(res);
+                    let albumOne = res[0];
+                    let albumTwo = res[1];
                 } else {
-                    console.log('game over');
-                    modal.classList.toggle('hide-modal')
+                    if (pop1 > pop2) {
+                        count += 1;
+                        score += 1;
+                        displayScore.innerText = `${score} / ${count}`;
+                    } else {
+                        count += 1;
+                        displayScore.innerText = `${score} / ${count}`;
+                    }
+                    modal.classList.toggle('bg-active');
+                    finalScore.innerText = `${score}/${count}`;
+                    if (score == 9 || score == 10) {
+                        text1.classList.toggle('hide');
+                    } else if (score == 6 || score == 7 || score == 8) {
+                        text2.classList.toggle('hide');
+                    } else if (score == 3 || score == 4 || score == 5) {
+                        text3.classList.toggle('hide');
+                    } else {
+                        text4.classList.toggle('hide');
+                    }
                     return;
                 }
             };
                 
             function playGameTwo() {
+                albumContainer1.removeEventListener('click', playGameOne);
+                albumContainer2.removeEventListener('click', playGameTwo);
                 console.log(pop1, pop2)
-                if (count < 10) {
+                if (count < 9) {
                     if (pop1 < pop2) {
                         console.log('You Win!');
                         count += 1;
@@ -214,9 +246,28 @@ async function handleArtistAlbum() {
         
                     let res = pickRandomAlbums(filteredAlbums);
                     displayAlbumInfo(res);
+                    let albumOne = res[0];
+                    let albumTwo = res[1];
                 } else {
-                    console.log('game over');
-                    modal.classList.toggle('hide-modal');
+                    if (pop1 < pop2) {
+                        count += 1;
+                        score += 1;
+                        displayScore.innerText = `${score} / ${count}`;
+                    } else {
+                        count += 1;
+                        displayScore.innerText = `${score} / ${count}`;
+                    }
+                    modal.classList.toggle('bg-active');
+                    finalScore.innerText = `${score}/${count}`;
+                    if (score == 9 || score == 10) {
+                        text1.classList.toggle('hide');
+                    } else if (score == 6 || score == 7 || score == 8) {
+                        text2.classList.toggle('hide');
+                    } else if (score == 3 || score == 4 || score == 5) {
+                        text3.classList.toggle('hide');
+                    } else {
+                        text4.classList.toggle('hide');
+                    }
                     return;
                 }
             };
@@ -279,22 +330,8 @@ function pickRandomAlbums(albumList) {
     return [firstAlbum, secondAlbum];
 }
 
-function getPopularityScore() {
-    console.log(this)
-}
-
-function filterPopularityScores(popularityScores) {
-    console.log('hello')
-    // Sorts albums from highest pop. score to lowest
-    const sortedScores = popularityScores.sort((a, b) => b - a)
-    // Gets top 10 albums by popularity score
-    const topTenScores = sortedScores.slice(0, 10)
-    return topTenScores
-}
-
 // Calls API to obtain all of selected artist's albums
 async function callArtistAlbumApi(artist) {
-    console.log('michael')
     let access_token1 = localStorage.getItem('access_token')
     let url = `https://api.spotify.com/v1/artists/${artist.id}/albums?include_groups=album&limit=50`;
     let xhr = new XMLHttpRequest();
@@ -317,6 +354,7 @@ const artistNameHeader = document.getElementById('artistName');
 
 // Gets top 10 user artists as objects
 async function getUserTopArtists() {
+    let access_token = localStorage.getItem('access_token')
     const userTopArtists = await fetch(TOP_USER_ARTISTS, {
         method: 'GET',
         headers: {
@@ -432,7 +470,6 @@ function filterAlbumDuplicates(albumInfo) {
     return unique;
     
 }
-
 
 if (requestAuthBtn) {
     requestAuthBtn.addEventListener('click', requestAuthorization);
