@@ -2,7 +2,7 @@
 // 10 albums.
 
 // let redirect_uri = "http://127.0.0.1:5500/Spotify-API-Game/artistPicker.html";
-let redirect_uri = "https://playa-spotify-game.netlify.app/";
+let redirect_uri = "https://playa-spotify-game.netlify.app/artistpicker";
 
 // NOT BEST PRACTICE: only done because this project doesn't have a server
 let client_id = '707ddb1c1701414db37c26ccdd399cd0';
