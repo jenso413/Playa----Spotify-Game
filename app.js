@@ -1,8 +1,8 @@
 // Display 'your top artists' and allow to pick from them to select their top
 // 10 albums.
 
-// let redirect_uri = "http://127.0.0.1:5500/Spotify-API-Game/artistPicker.html";
-let redirect_uri = "https://playa-spotify-game.netlify.app/artistpicker";
+let redirect_uri = "http://127.0.0.1:5500/Spotify-API-Game/artistPicker.html";
+// let redirect_uri = "https://playa-spotify-game.netlify.app/artistpicker";
 
 // NOT BEST PRACTICE: only done because this project doesn't have a server
 let client_id = '707ddb1c1701414db37c26ccdd399cd0';
@@ -19,7 +19,6 @@ const topArtistList = document.getElementById('topArtistList');
 let angle = 0;
 
 function gallerySpin(sign) {
-    console.log('hello')
     const spinner = document.getElementById('topArtistList');
     if(!sign) {
         angle += 45;
@@ -330,6 +329,7 @@ const artistNameHeader = document.getElementById('artistName');
 
 // Gets top 10 user artists as objects
 async function getUserTopArtists() {
+    console.log('hi')
     let access_token = localStorage.getItem('access_token')
     const userTopArtists = await fetch(TOP_USER_ARTISTS, {
         method: 'GET',
@@ -339,7 +339,7 @@ async function getUserTopArtists() {
         }
     })
         .then(res => res.json())
-        .then(data => data.items)
+        .then(data => data.items);
 
     displayTopArtists(userTopArtists)
 }
@@ -347,10 +347,11 @@ async function getUserTopArtists() {
 // Displays user's top artists to the dom
 function displayTopArtists(artistList) {
 
-    // Don't really need this part, just for organization
     const artistNames = artistList.map(artist => {
         return {name: artist.name, id: artist.id, picture: artist.images[0].url}
     })
+
+    console.log(artistNames)
 
     artistNames.forEach(artist => {
         // Making div
@@ -365,16 +366,18 @@ function displayTopArtists(artistList) {
         let artistName = document.createElement('h2');
         artistName.innerText = artist.name;
         artistDiv.appendChild(artistName);
+        
+        if (topArtistList.children.length < 8) {
+            topArtistList.appendChild(artistDiv)
 
-        topArtistList.appendChild(artistDiv)
-        // artistDiv.addEventListener('click', callArtistAlbumApi.bind(null, artist))
-
-        artistDiv.addEventListener('click', () => {
-            // Allows us to access clicked on artist name on next page
-            localStorage.setItem('artist', JSON.stringify(artist));
-            window.location.href = 'APIgame.html';
-            doThis();
+            artistDiv.addEventListener('click', () => {
+                // Allows us to access clicked on artist name on next page
+                localStorage.setItem('artist', JSON.stringify(artist));
+                window.location.href = 'APIgame.html';
+                doThis();
         })
+        }
+        
     })
 }
 
