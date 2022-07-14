@@ -1,14 +1,14 @@
 // Display 'your top artists' and allow to pick from them to select their top
 // 10 albums.
 
-let redirect_uri = "http://127.0.0.1:5500/Spotify-API-Game/index.html";
+let redirect_uri = "http://127.0.0.1:5500/Spotify-API-Game/artistPicker.html";
 
+// NOT BEST PRACTICE: only done because this project doesn't have a server
 let client_id = '707ddb1c1701414db37c26ccdd399cd0';
 let client_secret = 'fa89a50fa328403e8aaace62f84760ac';
 
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN = "https://accounts.spotify.com/api/token";
-// const ARTIST_ALBUM = "https://api.spotify.com/v1/artists/5K4W6rqBFWDnAN6FQUkS6x/albums?include_groups=album&limit=50"; // getting all of kanye's albums
 const TOP_USER_ARTISTS = "https://api.spotify.com/v1/me/top/artists?limit=8" // Gets top 8 user artists
 
 const requestAuthBtn = document.getElementById('request-auth');
@@ -29,9 +29,6 @@ function gallerySpin(sign) {
 }
 
 function onPageLoad() {
-    // Persist to local storage so we can read them again after page load
-    // client_id = localStorage.getItem('client_id', client_id);
-    // client_secret = localStorage.getItem('client_secret', client_secret);
 
     getUserTopArtists();
 
@@ -107,16 +104,6 @@ function getCode() {
 
 function requestAuthorization() {
 
-    // Fetch client id and client secret from inputs
-    // client_id = document.getElementById('clientId').value;
-    // client_secret = document.getElementById('clientSecret').value;
-
-    // Set them each in local storage
-    // localStorage.setItem('client_id', client_id);
-    // localStorage.setItem('client_secret', client_secret);
-
-    // Build URL to request authorization from spotify
-
     let url = AUTHORIZE;    
     url += '?client_id=' + client_id;
     url += '&response_type=code';
@@ -139,10 +126,9 @@ let eventListenerPlaced = false;
 
 const playAgainBtn = document.getElementById('play-again');
 
-// Redirects to artist selection again. Need to find a way to save and get access token from local storage
 if (playAgainBtn) {
     playAgainBtn.addEventListener('click', () => {
-        window.location.href = 'index.html'
+        window.location.href = 'artistPicker.html'
         doThis();
     })    
 }
@@ -158,11 +144,7 @@ async function handleArtistAlbum() {
         let filteredAlbums = filterAlbumDuplicates(albumCoversandTitles);
         let randomAlbums = pickRandomAlbums(filteredAlbums)
         displayAlbumInfo(randomAlbums);
-        // let albumPopularityScores = await getAlbumPopularity(result) // returns array of album id's
-        // Here we can get album art, including album title
 
-
-        // NOT OPTIMAL: FIX THIS
         function displayAlbumInfo(albumInfo) {
 
             console.log('porky')
@@ -281,9 +263,6 @@ async function handleArtistAlbum() {
     }
 }
 
-// Takes array of objects, with name popularity and cover properties
-// Displays album cover and title to the DOM
-
 const albumDisplay = document.getElementById('albumDisplay');
 
 const albumContainer1 = document.getElementById('albumContainer1');
@@ -297,10 +276,6 @@ let albumCoverImg2 = document.getElementById('coverArt2');
 let albumTitle2 = document.getElementById('albumTitle2');
 
 const displayScore = document.getElementById('scoreNumber');
-
-
-
-
 
 // Picks two random albums from array of album objects
 // Places random albums in an array
@@ -399,7 +374,6 @@ function displayTopArtists(artistList) {
             window.location.href = 'APIgame.html';
             doThis();
         })
-        // artistDiv.addEventListener('click', displayArtistName.bind(null, artist.name))
     })
 }
 

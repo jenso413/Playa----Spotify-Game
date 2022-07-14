@@ -4,27 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify API Project</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="app.js" defer></script>
+    <title>Sign In</title>
+    <link rel="stylesheet" href="sign-in-style.css">
 </head>
-<body onload="onPageLoad()">
-    
-    <h1>Album Knowledge Test</h1>
-    <h3>Pick from your favorite artists!</h3>
-
-    <div class='slider'>
-        <div class='spinner' id='topArtistList'></div>
-            <!-- <div>
-                <img src="" alt="">
-                <h2>Placeholder</h2>
-            </div> -->
+<body>
+    <div class="title">
+        <h1>Album Knowledge Test</h1>
+        <div>
+            <span>by</span>
+            <img class='logo' src="./vector/use-me.PNG" alt="">
+        </div>
     </div>
-
-    <div class="btnContainer">
-        <span class='scrollBtn left' onclick="gallerySpin('')">&lt;</span>
-        <span class='scrollBtn right' onclick="gallerySpin('-')">&gt;</span>
-    </div>
-
+    <input type="button" class='btn' id='request-auth' value='Sign In'>
+    <script src="app.js"></script>
 </body>
 </html>
